@@ -3,6 +3,8 @@
 """
 Created on Mon Jul 25 11:09:39 2022
 
+WORK IN PROGRESS
+
 Try to build a classifier for the MNIST dataset that achieves over 97% 
 accuracy on the test set. Hint: the KNeighborsClassifier works quite well
 for this task; you just need to find good hyperparameter values (try a grid
@@ -16,6 +18,7 @@ import pandas as pd
 import matplotlib.pyplot as plt
 from sklearn.model_selection import StratifiedShuffleSplit
 from sklearn.model_selection import cross_val_score
+from sklearn.model_selection import GridSearchCV
 
 # importing models
 from sklearn.linear_model import LogisticRegression
@@ -34,7 +37,30 @@ for train_index, test_index in sss.split(X,y):
     X_train, y_train = X[train_index], y[train_index]
     X_test, y_test = X[test_index], y[test_index]
 
-# Built-in data set, so no missing values, no cleaing needed.
+# Data has no missing values and is preprocessed, so no cleaing needed.
 
+# using a KNN model, as recommended
 knn = KNeighborsClassifier()
+
+# Parameter tuning.
+# starting by performing a broad-range search on n_neighbours to work out the 
+# rough scale the parameter should be on 
+params = {
+    'n_neighbors':[3,9,27],
+    'weights':['uniform','distance']
+    }
+paramSearch = GridSearchCV(knn, params)
+paramSearch.fit(X_train, y_train)
+
+# best params found were...
+
+# perfoming a closer ranged search on n_neighbours, centred on the best value
+# found by the previous search
+
+# training final model with (params)
+
+# testing model
+
+# reviewing model performance - accuracy, precision/recall 
+
 
