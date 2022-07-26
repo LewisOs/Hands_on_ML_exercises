@@ -22,13 +22,13 @@ def image_shifter(image, x_size=28, y_size=28):
     left = left.flat
     
     right = np.column_stack((image_2D[:, 0], image_2D[:, 0:-1]))
-    right = left.right
+    right = right.flat
     
     up = np.row_stack((image_2D[1:, :], image_2D[-1, :]))
-    up = left.up
+    up = up.flat
     
     down = np.row_stack((image_2D[0, :], image_2D[0:-1, :]))
-    down = left.down
+    down = down.flat
     
     return left, right, up, down
     
