@@ -14,7 +14,7 @@ from sklearn.datasets import fetch_openml
 
 mnist = fetch_openml(name='mnist_784')
 
-X_data, y_data = mnist.data, mnist.target
+X_data, y_data = mnist.data, mnist.target.astype('float64')
 
 X_left = np.zeros((70000, 784))
 y_left = np.zeros(70000)
@@ -35,7 +35,7 @@ print("Shifting starting...")
 for i in range(len(mnist.data)):
     X_left[i], X_right[i], X_up[i], X_down[i] = image_shifter(X_data[i])
     for y in ys:
-        y[i] = int(y_data[i])
+        y[i] = y_data[i]
     if i % 1000 == 0:
         print(f"{i} of 70000 images shifted so far.")
 

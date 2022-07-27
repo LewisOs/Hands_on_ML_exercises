@@ -19,6 +19,7 @@ import matplotlib.pyplot as plt
 from sklearn.model_selection import StratifiedShuffleSplit
 from sklearn.model_selection import cross_val_score
 from sklearn.model_selection import GridSearchCV
+import time 
 
 # importing models
 from sklearn.linear_model import LogisticRegression
@@ -30,6 +31,8 @@ from sklearn.neighbors import KNeighborsClassifier
 from sklearn.datasets import fetch_openml
 mnist = fetch_openml(name='mnist_784')
 
+print("data loaded")
+
 # splitting the data into stratified train & test sets
 X, y = mnist.data, mnist.target # mnist mj.data.shape is (n_samples, n_features)
 sss = StratifiedShuffleSplit(n_splits = 1, test_size = 0.2, random_state = 0)
@@ -37,20 +40,34 @@ for train_index, test_index in sss.split(X,y):
     X_train, y_train = X[train_index], y[train_index]
     X_test, y_test = X[test_index], y[test_index]
 
+print("data split")
+
 # Data has no missing values and is preprocessed, so no cleaing needed.
 
 # using a KNN model, as recommended
 knn = KNeighborsClassifier()
 
+print("model created")
+
 # Parameter tuning.
 # starting by performing a broad-range search on n_neighbours to work out the 
 # rough scale the parameter should be on 
-params = {
-    'n_neighbors':[3,9,27],
-    'weights':['uniform','distance']
-    }
-paramSearch = GridSearchCV(knn, params)
+
+print("beginning param tuning")
+params = {'n_neighbors':[3,6,12,24],
+           'weights':['uniform', 'distance'],
+           'leaf_size':[10,20,30]
+           }
+
+paramSearch = GridSearchCV(
+    estimator = knn,
+    param_grid = params,
+    cv=5)
+
+start = time.time()
 paramSearch.fit(X_train, y_train)
+end = time.time()
+print(f"Execution time for knn paramSearch was: {end-start}")
 
 # best params found were...
 
